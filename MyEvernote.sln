@@ -5,6 +5,12 @@ VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyEvernote.WebUI", "MyEvernote.WebUI\MyEvernote.WebUI.csproj", "{58D9B5EB-DA1A-468A-8B00-5BE88322D5A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyEvernote.BusinessLayer", "MyEvernote.BusinessLayer\MyEvernote.BusinessLayer.csproj", "{1B491926-A161-4D12-8FAB-B3A8B65C10CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyEvernote.DataAccessLayer", "MyEvernote.DataAccessLayer\MyEvernote.DataAccessLayer.csproj", "{044C7557-0C24-4BB2-B0B9-91AC717261AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyEvernote.Entity", "MyEvernote.Entity\MyEvernote.Entity.csproj", "{E60F6D08-7D8D-492D-874F-C92A1E523B09}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{58D9B5EB-DA1A-468A-8B00-5BE88322D5A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58D9B5EB-DA1A-468A-8B00-5BE88322D5A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58D9B5EB-DA1A-468A-8B00-5BE88322D5A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B491926-A161-4D12-8FAB-B3A8B65C10CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B491926-A161-4D12-8FAB-B3A8B65C10CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B491926-A161-4D12-8FAB-B3A8B65C10CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B491926-A161-4D12-8FAB-B3A8B65C10CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{044C7557-0C24-4BB2-B0B9-91AC717261AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{044C7557-0C24-4BB2-B0B9-91AC717261AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{044C7557-0C24-4BB2-B0B9-91AC717261AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{044C7557-0C24-4BB2-B0B9-91AC717261AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E60F6D08-7D8D-492D-874F-C92A1E523B09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E60F6D08-7D8D-492D-874F-C92A1E523B09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E60F6D08-7D8D-492D-874F-C92A1E523B09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E60F6D08-7D8D-492D-874F-C92A1E523B09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
