@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyEvernote.Entity
 {
-    internal class Comment:MyEntityBase
+    public class Comment:MyEntityBase
     {
         public string Text { get; set; }
         public virtual EvernoteUser Owner { get; set; }

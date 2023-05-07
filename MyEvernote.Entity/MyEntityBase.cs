@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyEvernote.Entity
 {
-    internal class MyEntityBase
+    public class MyEntityBase
     {
         public int Id { get; set; }      
         public DateTime CreatedOn { get; set; }

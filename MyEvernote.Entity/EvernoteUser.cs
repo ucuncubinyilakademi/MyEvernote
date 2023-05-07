@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MyEvernote.Entity
 {
-    internal class EvernoteUser:MyEntityBase
+    [Table("KUllanicilar")]
+    public class EvernoteUser:MyEntityBase
     {
         public string Name { get; set; }
         public string Surname { get; set; }

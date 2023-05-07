@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyEvernote.Entity
 {
-    internal class Category:MyEntityBase
+    public class Category:MyEntityBase
     {              
         public string Title { get; set; }
         public string Description { get; set; }

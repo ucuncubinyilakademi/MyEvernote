@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyEvernote.Entity
 {
-    internal class Liked
+    public class Liked
     {
         public int Id { get; set; }
         public virtual Note Note { get; set; }
