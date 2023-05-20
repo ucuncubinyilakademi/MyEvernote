@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace MyEvernote.DataAccessLayer
 {
-    internal class DatabaseContext:DbContext
+    public class DatabaseContext:DbContext
     {
         public DatabaseContext():base("NOTESQL")
         {
-
+            Database.SetInitializer(new MyInitializer());
         }
         public DbSet<EvernoteUser> Users { get; set; }
         public DbSet<Note> Notes { get; set; }
