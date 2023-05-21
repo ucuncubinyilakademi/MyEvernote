@@ -18,11 +18,11 @@ namespace MyEvernote.DataAccessLayer.EntityFramework
 
         public Repository()
         {          
-            _objectSet = db.Set<T>();
+            _objectSet = db.Set<T>(); // db.Set<Category> ==> db.Categories
         }
         public List<T> List()
         {
-            return _objectSet.ToList();
+            return _objectSet.ToList(); //db.Categories.ToList();
         }
 
         public List<T> List(Expression<Func<T,bool>> filter)
@@ -32,7 +32,7 @@ namespace MyEvernote.DataAccessLayer.EntityFramework
 
         public T Find(Expression<Func<T, bool>> filter)
         {
-            return _objectSet.FirstOrDefault(filter);
+            return _objectSet.FirstOrDefault(filter); //db.Categories.FirstOrDefault(i=>i.Id==1);
         }
 
         public int Insert(T obj)

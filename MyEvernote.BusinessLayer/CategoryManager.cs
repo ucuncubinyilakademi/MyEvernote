@@ -12,7 +12,7 @@ namespace MyEvernote.BusinessLayer
     {
         Repository<Category> repo = new Repository<Category>();
         
-        public List<Category> Liste()
+        public List<Category> GetCategories()
         {
             return repo.List();
         }
