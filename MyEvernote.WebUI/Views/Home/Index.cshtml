@@ -1,6 +1,9 @@
-﻿
+﻿@using MyEvernote.BusinessLayer
 @{
     ViewBag.Title = "Index";
+
+    CategoryManager categoryManager = new CategoryManager();
+    List<MyEvernote.Entity.Category> categories = categoryManager.Liste();
 }
 
 <div class="container">
@@ -11,9 +14,11 @@
             <p class="lead">Kategoriler</p>
             <div class="list-group">
                 <a href="#" class="list-group-item"><span class="glyphicon glyphicon-arrow-right"></span> Tümü</a>
-                <a href="#" class="list-group-item"><span class="glyphicon glyphicon-arrow-right"></span> Category1</a>
-                <a href="#" class="list-group-item"><span class="glyphicon glyphicon-arrow-right"></span> Category2</a>
-                <a href="#" class="list-group-item"><span class="glyphicon glyphicon-arrow-right"></span> Category3</a>
+                @foreach (var item in categories)
+                {
+                    <a href="#" class="list-group-item"><span class="glyphicon glyphicon-arrow-right"></span> @item.Title</a>
+                }
+
             </div>
         </div>
         <div class="col-md-9">

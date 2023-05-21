@@ -13,8 +13,6 @@ namespace MyEvernote.WebUI.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            Test test = new Test();
-
             return View();
         }
     }
