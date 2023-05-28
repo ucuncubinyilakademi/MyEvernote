@@ -15,6 +15,8 @@
     <!-- Add custom CSS here -->
     <link href="~/Content/css/shop-homepage.css" rel="stylesheet">
 
+    <script src="~/Scripts/jquery-3.6.4.min.js"></script>
+    <script src="~/Content/js/bootstrap.js"></script>
 </head>
 
 <body>
@@ -57,12 +59,12 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="#about">
+                        <a href="/home/login">
                             <span class="glyphicon glyphicon-log-in"></span> Giriş
                         </a>
                     </li>
                     <li>
-                        <a href="#services">
+                        <a href="/Home/register">
                             <span class="glyphicon glyphicon-user"></span> Üye Ol
                         </a>
                     </li>
@@ -86,36 +88,39 @@
     @RenderBody()
     <!-- /.container -->
 
-    <div class="container">
+<div class="container">
 
-        <hr>
+    <hr>
 
-        <footer>
-            <div class="row">
-                <div class="col-lg-4 text-center">
-                    <p> Copyright &copy; Company 2023 - Template by URSSoftware.com </p>
-                </div>
-                <div class="col-lg-4 text-center">
-                    <p> Tüm hakları saklıdır &copy; MyEvernote @DateTime.Now.Year </p>
-                </div>
-                <div class="col-lg-4 text-center">
-                
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="email adresiniz" />
-                        <span class="input-group-btn">
-                            <button class="btn btn-primary" type="submit">
-                                <span class="glyphicon glyphicon-send"></span> Gönder 
-                            </button>
-                        </span>
-                    </div>
+    <footer id="footer">
+
+        <div class="row">
+            <div class="col-lg-4 text-center">
+                <p> Copyright &copy; Company 2023 - Template by URSSoftware.com </p>
+            </div>
+            <div class="col-lg-4 text-center">
+                <p> Tüm hakları saklıdır &copy; MyEvernote @DateTime.Now.Year </p>
+            </div>
+            <div class="col-lg-4 text-center">
+
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="email adresiniz" />
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit">
+                            <span class="glyphicon glyphicon-send"></span> Gönder
+                        </button>
+                    </span>
                 </div>
             </div>
-        </footer>
-    </div>
+        </div>
+
+    </footer>
+
+</div>
     <!-- /.container -->
     <!-- JavaScript -->
-    <script src="~/Scripts/jquery-3.6.4.min.js"></script>
-    <script src="~/Content/js/bootstrap.js"></script>
+
+  
 
 </body>
 
