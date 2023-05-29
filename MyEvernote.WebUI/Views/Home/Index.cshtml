@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<MyEvernote.Entity.Note>
 @{
     ViewBag.Title = "Index";
 }
@@ -8,7 +8,7 @@
         <!--Row satırı 12 eşit parçaya ayırır.-->
         <div class="col-md-3">
             <!--Kategoriler-->
-          @Html.Partial("_PartialCategories")
+            @Html.Partial("_PartialCategories")
         </div>
         <div class="col-md-9">
             <div class="row carousel-holder">
@@ -42,191 +42,49 @@
             </div>
 
             <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-sm-4 col-lg-4 col-md-4">
+                        <div class="thumbnail">
+                            <img src="http://placehold.it/320x150" alt="@item.Title">
+                            <div class="caption">
+                                <h6 class="text-right">
+                                    <span class="glyphicon glyphicon-user"></span> @item.Owner.Username <br />
+                                    <span class="glyphicon glyphicon-time"></span> @item.ModifiedOn.ToString("dd:MM:yy HH:mm")
+                                </h6>
+                                <h4>
+                                    @item.Title
+                                </h4>
+                                @if (string.IsNullOrEmpty(item.Text) == false && item.Text.Length > 70)
+                                {
+                                    <p>@(item.Text.Substring(0,70)+"...")</p>
+                                    <p class="text-right"><a href="#" class="btn btn-default btn-sm">devamı <span class="glyphicon glyphicon-chevron-right"></span></a></p>
+                                }
+                                else
+                                {
+                                    <p>@item.Text</p>
+                                }
+                            </div>
+                            <div>
+                                <hr />
+                            </div>
+                            <div class="ratings">
+                                <p class="pull-right">
+                                    <button class="btn btn-default btn-sm">
+                                        <span class="glyphicon glyphicon-comment"></span> Yorumlar
+                                    </button>
+                                </p>
+                                <p>
+                                    <button class="btn btn-default btn-sm" type="button">
+                                        <span class="glyphicon glyphicon-star-empty"></span> @item.LikeCount
+                                    </button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
 
-                <div class="col-sm-4 col-lg-4 col-md-4">
-                    <div class="thumbnail">
-                        <img src="http://placehold.it/320x150" alt="">
-                        <div class="caption">
-                            <h6 class="text-right">
-                                <span class="glyphicon glyphicon-user"></span> altanemre <br />
-                                <span class="glyphicon glyphicon-time"></span> 01.01.2023 12:10
-                            </h6>
-                            <h4>
-                                Sit amet, consectetur.
-                            </h4>
-                            <p>See more snippets like this online store item at </p>
-                        </div>
-                        <div>
-                            <hr />
-                        </div>
-                        <div class="ratings">
-                            <p class="pull-right">
-                                <button class="btn btn-default btn-sm">
-                                    <span class="glyphicon glyphicon-comment"></span> Yorumlar
-                                </button>
-                            </p>
-                            <p>
-                                <button class="btn btn-default btn-sm" type="button">
-                                    <span class="glyphicon glyphicon-star-empty"></span> 15
-                                </button>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4 col-lg-4 col-md-4">
-                    <div class="thumbnail">
-                        <img src="http://placehold.it/320x150" alt="">
-                        <div class="caption">
-                            <h6 class="text-right">
-                                <span class="glyphicon glyphicon-user"></span> altanemre <br />
-                                <span class="glyphicon glyphicon-time"></span> 01.01.2023 12:10
-                            </h6>
-                            <h4>
-                                Sit amet, consectetur.
-                            </h4>
-                            <p>See more snippets like this online store item at </p>
-                        </div>
-                        <div>
-                            <hr />
-                        </div>
-                        <div class="ratings">
-                            <p class="pull-right">
-                                <button class="btn btn-default btn-sm">
-                                    <span class="glyphicon glyphicon-comment"></span> Yorumlar
-                                </button>
-                            </p>
-                            <p>
-                                <button class="btn btn-default btn-sm" type="button">
-                                    <span class="glyphicon glyphicon-star-empty"></span> 15
-                                </button>
-                            </p>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-sm-4 col-lg-4 col-md-4">
-                    <div class="thumbnail">
-                        <img src="http://placehold.it/320x150" alt="">
-                        <div class="caption">
-                            <h6 class="text-right">
-                                <span class="glyphicon glyphicon-user"></span> altanemre <br />
-                                <span class="glyphicon glyphicon-time"></span> 01.01.2023 12:10
-                            </h6>
-                            <h4>
-                                Sit amet, consectetur.
-                            </h4>
-                            <p>See more snippets like this online store item at </p>
-                        </div>
-                        <div>
-                            <hr />
-                        </div>
-                        <div class="ratings">
-                            <p class="pull-right">
-                                <button class="btn btn-default btn-sm">
-                                    <span class="glyphicon glyphicon-comment"></span> Yorumlar
-                                </button>
-                            </p>
-                            <p>
-                                <button class="btn btn-default btn-sm" type="button">
-                                    <span class="glyphicon glyphicon-star-empty"></span> 15
-                                </button>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-4 col-lg-4 col-md-4">
-                    <div class="thumbnail">
-                        <img src="http://placehold.it/320x150" alt="">
-                        <div class="caption">
-                            <h6 class="text-right">
-                                <span class="glyphicon glyphicon-user"></span> altanemre <br />
-                                <span class="glyphicon glyphicon-time"></span> 01.01.2023 12:10
-                            </h6>
-                            <h4>
-                                Sit amet, consectetur.
-                            </h4>
-                            <p>See more snippets like this online store item at </p>
-                        </div>
-                        <div>
-                            <hr />
-                        </div>
-                        <div class="ratings">
-                            <p class="pull-right">
-                                <button class="btn btn-default btn-sm">
-                                    <span class="glyphicon glyphicon-comment"></span> Yorumlar
-                                </button>
-                            </p>
-                            <p>
-                                <button class="btn btn-default btn-sm" type="button">
-                                    <span class="glyphicon glyphicon-star-empty"></span> 15
-                                </button>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-4 col-lg-4 col-md-4">
-                    <div class="thumbnail">
-                        <img src="http://placehold.it/320x150" alt="">
-                        <div class="caption">
-                            <h6 class="text-right">
-                                <span class="glyphicon glyphicon-user"></span> altanemre <br />
-                                <span class="glyphicon glyphicon-time"></span> 01.01.2023 12:10
-                            </h6>
-                            <h4>
-                                Sit amet, consectetur.
-                            </h4>
-                            <p>See more snippets like this online store item at </p>
-                        </div>
-                        <div>
-                            <hr />
-                        </div>
-                        <div class="ratings">
-                            <p class="pull-right">
-                                <button class="btn btn-default btn-sm">
-                                    <span class="glyphicon glyphicon-comment"></span> Yorumlar
-                                </button>
-                            </p>
-                            <p>
-                                <button class="btn btn-default btn-sm" type="button">
-                                    <span class="glyphicon glyphicon-star-empty"></span> 15
-                                </button>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-4 col-lg-4 col-md-4">
-                    <div class="thumbnail">
-                        <img src="http://placehold.it/320x150" alt="">
-                        <div class="caption">
-                            <h6 class="text-right">
-                                <span class="glyphicon glyphicon-user"></span> altanemre <br />
-                                <span class="glyphicon glyphicon-time"></span> 01.01.2023 12:10
-                            </h6>
-                            <h4>
-                                Sit amet, consectetur.
-                            </h4>
-                            <p>See more snippets like this online store item at </p>
-                        </div>
-                        <div>
-                            <hr />
-                        </div>
-                        <div class="ratings">
-                            <p class="pull-right">
-                                <button class="btn btn-default btn-sm">
-                                    <span class="glyphicon glyphicon-comment"></span> Yorumlar
-                                </button>
-                            </p>
-                            <p>
-                                <button class="btn btn-default btn-sm" type="button">
-                                    <span class="glyphicon glyphicon-star-empty"></span> 15
-                                </button>
-                            </p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

@@ -7,10 +7,10 @@
 
 <p class="lead">Kategoriler</p>
 <div class="list-group">
-    <a href="#" class="list-group-item"><span class="glyphicon glyphicon-arrow-right"></span> Tümü</a>
+    <a href="/Home/Index" class="list-group-item"><span class="glyphicon glyphicon-arrow-right"></span> Tümü</a>
     @foreach (var item in categories)
     {
-        <a href="#" class="list-group-item"><span class="glyphicon glyphicon-arrow-right"></span> @item.Title</a>
+        <a href="/Home/ByCategory/@item.Id" class="list-group-item"><span class="glyphicon glyphicon-arrow-right"></span> @item.Title</a>
     }
 
 </div>

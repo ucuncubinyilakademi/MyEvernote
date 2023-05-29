@@ -10,6 +10,7 @@ namespace MyEvernote.DataAccessLayer.Abstract
     public interface IRepository<T>
     {
         List<T> List();
+        IQueryable<T> ListQueryable();
         List<T> List(Expression<Func<T, bool>> filter);
         T Find(Expression<Func<T, bool>> filter);
         int Insert(T obj);

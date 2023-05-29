@@ -20,6 +20,10 @@ namespace MyEvernote.DataAccessLayer.EntityFramework
         {          
             _objectSet = db.Set<T>(); // db.Set<Category> ==> db.Categories
         }
+        public IQueryable<T> ListQueryable()
+        {
+            return _objectSet.AsQueryable(); 
+        }
         public List<T> List()
         {
             return _objectSet.ToList(); //db.Categories.ToList();
