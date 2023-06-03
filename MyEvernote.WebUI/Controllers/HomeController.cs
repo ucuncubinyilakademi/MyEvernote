@@ -1,5 +1,6 @@
 ﻿using MyEvernote.BusinessLayer;
 using MyEvernote.Entity;
+using MyEvernote.Entity.Messages;
 using MyEvernote.Entity.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace MyEvernote.WebUI.Controllers
     {
         private NoteManager noteManager = new NoteManager();
         private CategoryManager categoryManager = new CategoryManager();
+        private EvernoteUserManager evernoteuserManager = new EvernoteUserManager();
         // GET: Home
         public ActionResult Index()
         {
@@ -30,7 +32,7 @@ namespace MyEvernote.WebUI.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Category cat = cm.GetCategoryById(id.Value);
+            Category cat = categoryManager.GetCategoryById(id.Value);
 
             if (cat == null)
             {
@@ -57,11 +59,23 @@ namespace MyEvernote.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginViewModel model)
         {
-            // Giriş kontrolü ve yönlendirme...
-            // Session'a kullanıcı bilgi saklama...
             if (ModelState.IsValid)
             {
+                // Giriş kontrolü ve yönlendirme...
+                BusinessLayerResult<EvernoteUser> res = evernoteuserManager.LoginUser(model);
+                if (res.Errors.Count > 0)
+                {
+                    if(res.Errors.Find(x=> x.Code == ErrorMessageCode.UserIsNotActive) != null)
+                    {
+                        ViewBag.SetLink = "http://Home/Activate/1234-5678-1234";
+                    }
 
+                    res.Errors.ForEach(x => ModelState.AddModelError("", x.Message));
+                    return View(model);
+                }
+                // Session'a kullanıcı bilgi saklama..
+                Session["login"] = res.result;
+                return RedirectToAction("Index");
             }
             return View(model);
         }
@@ -81,16 +95,14 @@ namespace MyEvernote.WebUI.Controllers
 
             if (ModelState.IsValid)
             {
-                EvernoteUserManager evernoteUserManager = new EvernoteUserManager();
-                EvernoteUser user = null;
-                try
+                BusinessLayerResult<EvernoteUser> res = evernoteuserManager.RegisterUser(model);
+                if (res.Errors.Count > 0)
                 {
-                    user = evernoteUserManager.RegisterUser(model);
+                    res.Errors.ForEach(x => ModelState.AddModelError("", x.Message));
+                    return View(model);
                 }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", ex.Message); 
-                }
+
+                return RedirectToAction("RegisterOk");
             }
 
 
@@ -111,7 +123,8 @@ namespace MyEvernote.WebUI.Controllers
 
         public ActionResult Logout()
         {
-            return View();
+            Session.Clear();
+            return RedirectToAction("Index");
         }
     }
 }

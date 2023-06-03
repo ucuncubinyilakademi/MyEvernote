@@ -10,26 +10,26 @@ using System.Threading.Tasks;
 
 namespace MyEvernote.DataAccessLayer.EntityFramework
 {
-    public class Repository<T> : RepositoryBase,IRepository<T> where T:class
+    public class Repository<T> : RepositoryBase, IRepository<T> where T : class
     {
         //  private DatabaseContext db = new DatabaseContext(); //Singleton Pattern
-               
+
         private DbSet<T> _objectSet;
 
         public Repository()
-        {          
+        {
             _objectSet = db.Set<T>(); // db.Set<Category> ==> db.Categories
         }
         public IQueryable<T> ListQueryable()
         {
-            return _objectSet.AsQueryable(); 
+            return _objectSet.AsQueryable();
         }
         public List<T> List()
         {
             return _objectSet.ToList(); //db.Categories.ToList();
         }
 
-        public List<T> List(Expression<Func<T,bool>> filter)
+        public List<T> List(Expression<Func<T, bool>> filter)
         {
             return _objectSet.Where(filter).ToList();
         }
@@ -41,12 +41,31 @@ namespace MyEvernote.DataAccessLayer.EntityFramework
 
         public int Insert(T obj)
         {
-           _objectSet.Add(obj);
+            _objectSet.Add(obj);
+            if (obj is MyEntityBase)
+            {
+                MyEntityBase o = obj as MyEntityBase;
+                DateTime now = DateTime.Now;
+
+                o.CreatedOn = now;
+                o.ModifiedOn = now;
+                o.ModifiedUsername = "system"; // TODO: İşlem yapan kullanıcı adı yazılmalı..
+            }
+
             return Save();
         }
 
         public int Update(T obj)
-        {            
+        {
+            if (obj is MyEntityBase)
+            {
+                MyEntityBase o = obj as MyEntityBase;
+                DateTime now = DateTime.Now;
+
+                o.CreatedOn = now;
+                o.ModifiedOn = now;
+                o.ModifiedUsername = "system"; // TODO: İşlem yapan kullanıcı adı yazılmalı..
+            }
             return Save();
         }
         public int Delete(T obj)
@@ -56,9 +75,9 @@ namespace MyEvernote.DataAccessLayer.EntityFramework
         }
         public int Save()
         {
-           return db.SaveChanges();
+            return db.SaveChanges();
         }
 
-   
+
     }
 }
