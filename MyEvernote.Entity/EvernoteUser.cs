@@ -17,6 +17,8 @@ namespace MyEvernote.Entity
         public string Surname { get; set; }
         [Required,StringLength(25)]
         public string Username { get; set; }
+        [StringLength(30)] //user.png
+        public string ProfileImageFilename { get; set; }
         [Required, StringLength(70)]
         public string Email { get; set; }
         [Required,StringLength(8)]//MinLength(6),MaxLength(8)

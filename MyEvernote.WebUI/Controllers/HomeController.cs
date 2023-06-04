@@ -50,6 +50,45 @@ namespace MyEvernote.WebUI.Controllers
         {
             return View();
         }
+
+        public ActionResult ShowProfile()
+        {
+            EvernoteUser currentUser = Session["login"] as EvernoteUser;
+            BusinessLayerResult<EvernoteUser> res = evernoteuserManager.GetUserById(currentUser.Id);
+            if (res.Errors.Count > 0)
+            {
+                // TODO : Kullanıcıyı bir hata ekranına yönlendirmek gerekiyor
+            }
+
+            return View(res.result);
+        }
+
+        public ActionResult EditProfile()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult EditProfile(EvernoteUser model)
+        {
+            return View();
+        }
+
+        public ActionResult DeleteProfile()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult DeleteProfile(EvernoteUser model)
+        {
+            return View();
+        }
+
+
+
+
+
         public ActionResult Login()
         {
             return View();
@@ -115,10 +154,29 @@ namespace MyEvernote.WebUI.Controllers
         }
 
 
-        public ActionResult UserActivate(Guid activate_id)
+        public ActionResult UserActivate(Guid id)
         {
-            // Kullanıcı aktivasyonu sağlanacak...
+            BusinessLayerResult<EvernoteUser> res = evernoteuserManager.ActivateUser(id);
+            if (res.Errors.Count > 0)
+            {
+                TempData["errors"] = res.Errors;
+                return RedirectToAction("UserActivateCancel");
+            }
+            return RedirectToAction("UserActivateOk");
+        }
+
+        public ActionResult UserActivateOk()
+        {            
             return View();
+        }
+        public ActionResult UserActivateCancel()
+        {
+            List<ErrorMessageObj> errors = null;
+            if (TempData["errors"] != null)
+            {
+                errors = TempData["errors"] as List<ErrorMessageObj>;
+            }
+            return View(errors);
         }
 
         public ActionResult Logout()

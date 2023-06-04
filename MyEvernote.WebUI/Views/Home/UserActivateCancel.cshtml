@@ -1,0 +1,35 @@
+﻿@using MyEvernote.Entity.Messages
+@model   List<ErrorMessageObj>
+@{
+    ViewBag.Title = "Geçersiz İşlem";
+}
+
+
+<div class="container">
+    <div class="alert alert-info">
+        <h2>Hesabınız aktifleştirildi.</h2>
+        <div class="text-danger">
+            <h2>Yönlendiriliyorsunuz.</h2>
+            <hr />
+            <p class="text-justify">
+                @foreach (var item in Model)
+                {
+                @item.Message<br />
+                }
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $("#footer").parent().hide();
+    });
+
+    setTimeout(function () {
+        window.location = "/Home/Index";
+    },3000)
+</script>
+
+
+

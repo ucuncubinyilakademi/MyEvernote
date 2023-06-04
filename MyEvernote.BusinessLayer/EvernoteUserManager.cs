@@ -1,9 +1,11 @@
-﻿using MyEvernote.DataAccessLayer.EntityFramework;
+﻿using MyEvernote.Common.Helpers;
+using MyEvernote.DataAccessLayer.EntityFramework;
 using MyEvernote.Entity;
 using MyEvernote.Entity.Messages;
 using MyEvernote.Entity.ValueObjects;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,12 +51,18 @@ namespace MyEvernote.BusinessLayer
                 if (dbResult > 0)
                 {
                     res.result = repo.Find(x => x.Email == data.Email && x.Username == data.Username);
+
+                    string siteUri = ConfigHelper.Get<string>("SiteRootUri");
+                    string activateUri = $"{siteUri}/Home/UserActivate/{res.result.ActivateGuid}";
+                    string body = $"Merhaba {res.result.Username};<br/><br/>Hesabınız aktifleştirmek için <a href='{activateUri}' target='_blank'>tıklayınız.</a>";
+
+                    MailHelper.SendMail(body, res.result.Email, "MyEvernote Hesap Aktifleştirme");
+
                 }
             }
 
             return res;
         }
-
         public BusinessLayerResult<EvernoteUser> LoginUser(LoginViewModel data)
         {
             // Giriş Kontrolü
@@ -76,6 +84,40 @@ namespace MyEvernote.BusinessLayer
 
             return res;
 
+        }
+        public BusinessLayerResult<EvernoteUser> ActivateUser(Guid id)
+        {
+            BusinessLayerResult<EvernoteUser> res = new BusinessLayerResult<EvernoteUser>();
+            res.result = repo.Find(x => x.ActivateGuid == id);
+
+            if(res.result != null)
+            {
+                if (res.result.IsActive)
+                {
+                    res.AddError(ErrorMessageCode.UserAlreadyActive, "Kullanıcı zaten aktif edilmiştir.");
+                    return res;
+                }
+
+                res.result.IsActive = true;
+                repo.Update(res.result);
+            }
+            else
+            {
+                res.AddError(ErrorMessageCode.ActivateIdDoesNotExists, "Aktifleştirilecek kullanıcı bulunamadı.");
+            }
+            return res;
+        }
+
+        public BusinessLayerResult<EvernoteUser> GetUserById(int id)
+        {
+            BusinessLayerResult<EvernoteUser> res = new BusinessLayerResult<EvernoteUser>();
+            res.result = repo.Find(x => x.Id == id);
+            if(res.result == null)
+            {
+                res.AddError(ErrorMessageCode.UserNotFound, "Kullanıcı bulunamadı.");
+            }
+
+            return res;
         }
     }
 }

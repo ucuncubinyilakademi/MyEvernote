@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using MyEvernote.Entity
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -21,6 +22,16 @@
 
 <body>
 
+    @{
+        EvernoteUser user = null;
+        if (Session["login"] != null)
+        {
+            user = Session["login"] as EvernoteUser;
+        }
+
+
+    }
+
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
@@ -30,17 +41,21 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Note Project</a>
+                <a class="navbar-brand" href="/Home/Index">My Evernote</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#about">
-                            <span class="glyphicon glyphicon-wrench"></span> Yönetim
-                        </a>
-                    </li>
+                    @if (user != null)
+                    {
+                        <li>
+                            <a href="#about">
+                                <span class="glyphicon glyphicon-wrench"></span> Yönetim
+                            </a>
+                        </li>
+                    }
+
                     <li>
                         <a href="/Home/MostLiked">
                             <span class="glyphicon glyphicon-star"></span> En Beğenilenler
@@ -58,26 +73,34 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/home/login">
-                            <span class="glyphicon glyphicon-log-in"></span> Giriş
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/Home/register">
-                            <span class="glyphicon glyphicon-user"></span> Üye Ol
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#contact">
-                            <span class="glyphicon glyphicon-user"></span> altanemre
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/Home/Logout">
-                            <span class="glyphicon glyphicon-log-out"></span> Çıkış
-                        </a>
-                    </li>
+                    @if (user == null)
+                    {
+                        <li>
+                            <a href="/home/login">
+                                <span class="glyphicon glyphicon-log-in"></span> Giriş
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Home/register">
+                                <span class="glyphicon glyphicon-user"></span> Üye Ol
+                            </a>
+                        </li>
+                    }
+
+                   else
+                    {
+                        <li>
+                            <a href="/Home/ShowProfile">
+                                <span class="glyphicon glyphicon-user"></span> @user.Username
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Home/Logout">
+                                <span class="glyphicon glyphicon-log-out"></span> Çıkış
+                            </a>
+                        </li>
+                    }
+
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -88,39 +111,39 @@
     @RenderBody()
     <!-- /.container -->
 
-<div class="container">
+    <div class="container">
 
-    <hr>
+        <hr>
 
-    <footer id="footer">
+        <footer id="footer">
 
-        <div class="row">
-            <div class="col-lg-4 text-center">
-                <p> Copyright &copy; Company 2023 - Template by URSSoftware.com </p>
-            </div>
-            <div class="col-lg-4 text-center">
-                <p> Tüm hakları saklıdır &copy; MyEvernote @DateTime.Now.Year </p>
-            </div>
-            <div class="col-lg-4 text-center">
+            <div class="row">
+                <div class="col-lg-4 text-center">
+                    <p> Copyright &copy; Company 2023 - Template by URSSoftware.com </p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <p> Tüm hakları saklıdır &copy; MyEvernote @DateTime.Now.Year </p>
+                </div>
+                <div class="col-lg-4 text-center">
 
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="email adresiniz" />
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary" type="submit">
-                            <span class="glyphicon glyphicon-send"></span> Gönder
-                        </button>
-                    </span>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="email adresiniz" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="submit">
+                                <span class="glyphicon glyphicon-send"></span> Gönder
+                            </button>
+                        </span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </footer>
+        </footer>
 
-</div>
+    </div>
     <!-- /.container -->
     <!-- JavaScript -->
 
-  
+
 
 </body>
 
