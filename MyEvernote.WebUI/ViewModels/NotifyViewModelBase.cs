@@ -21,6 +21,7 @@ namespace MyEvernote.WebUI.ViewModels
             IsRedirecting = true;
             RedirectingUrl = "/Home/Index";
             RedirectingTimeout = 5000;
+            Items = new List<T>();
         }
 
     }

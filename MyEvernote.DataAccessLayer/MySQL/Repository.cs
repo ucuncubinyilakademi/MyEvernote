@@ -1,4 +1,4 @@
-﻿using MyEvernote.DataAccessLayer.Abstract;
+﻿using MyEvernote.Core.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyEvernote.DataAccessLayer.MySQL
 {
-    public class Repository<T> : IRepository<T>
+    public class Repository<T> : IDataAccess<T>
     {
         public int Delete(T obj)
         {

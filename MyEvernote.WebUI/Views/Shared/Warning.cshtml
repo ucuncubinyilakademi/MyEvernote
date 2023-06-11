@@ -1,5 +1,5 @@
 ﻿@using MyEvernote.WebUI.ViewModels
-@model OkViewModel
+@model WarningViewModel
 @{
     ViewBag.Title = Model.Title;
 }
@@ -18,8 +18,8 @@
                     </div>
                     <div class="main-content">
 
-                        <div class="text-success">
-                            <h2><span class="glyphicon glyphicon-ok-circle"></span>&nbsp;&nbsp;&nbsp;&nbsp;@Model.Title</h2>
+                        <div class="text-warning">
+                            <h2><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;&nbsp;&nbsp;@Model.Title</h2>
                             <hr />
                             <p class="text-justify">
                                 @foreach (string item in Model.Items)
@@ -56,3 +56,5 @@
     //    },5000)
     //})
 </script>
+
+

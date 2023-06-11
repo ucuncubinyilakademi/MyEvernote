@@ -2,6 +2,7 @@
 using MyEvernote.Entity;
 using MyEvernote.Entity.Messages;
 using MyEvernote.Entity.ValueObjects;
+using MyEvernote.WebUI.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,7 +58,13 @@ namespace MyEvernote.WebUI.Controllers
             BusinessLayerResult<EvernoteUser> res = evernoteuserManager.GetUserById(currentUser.Id);
             if (res.Errors.Count > 0)
             {
-                // TODO : Kullanıcıyı bir hata ekranına yönlendirmek gerekiyor
+                ErrorViewModel errorNotifyObj = new ErrorViewModel()
+                {
+                    Title = "Hata Oluştu",
+                    Items = res.Errors
+                };
+
+                return View("Error", errorNotifyObj);
             }
 
             return View(res.result);
@@ -65,30 +72,79 @@ namespace MyEvernote.WebUI.Controllers
 
         public ActionResult EditProfile()
         {
-            return View();
+            EvernoteUser currentUser = Session["login"] as EvernoteUser;
+
+            BusinessLayerResult<EvernoteUser> res = evernoteuserManager.GetUserById(currentUser.Id);
+
+            if (res.Errors.Count > 0)
+            {
+                ErrorViewModel errorNotifyObj = new ErrorViewModel()
+                {
+                    Title = "Hata Oluştu",
+                    Items = res.Errors
+                };
+
+                return View("Error", errorNotifyObj);
+            }
+
+            return View(res.result);
         }
 
         [HttpPost]
-        public ActionResult EditProfile(EvernoteUser model)
+        public ActionResult EditProfile(EvernoteUser model, HttpPostedFileBase ProfileImage)
         {
-            return View();
+            if(ProfileImage != null && 
+                ProfileImage.ContentType == "image/jpeg" ||
+                ProfileImage.ContentType == "image/jpg" ||
+                ProfileImage.ContentType == "image/png")
+            {
+                string filename = $"user_{model.Id}.{ProfileImage.ContentType.Split('/')[1]}";
+
+                ProfileImage.SaveAs(Server.MapPath($"~/Content/images/{filename}"));
+                model.ProfileImageFilename = filename;
+            }
+
+            BusinessLayerResult<EvernoteUser> res = evernoteuserManager.UpdateProfile(model);
+
+            if (res.Errors.Count > 0)
+            {
+                ErrorViewModel errorNotifyObj = new ErrorViewModel()
+                {
+
+                    Title = "Profil Güncellenemdi",
+                    Items = res.Errors,
+                    RedirectingUrl="/Home/EditProfile"
+                };
+
+                return View("Error", errorNotifyObj);
+            }
+
+            Session["login"] = res.result; //profile güncellendiğinde oturum güncellenecek.
+            return RedirectToAction("ShowProfile");
         }
 
         public ActionResult DeleteProfile()
         {
-            return View();
+            EvernoteUser currentuser = Session["login"] as EvernoteUser;
+
+            BusinessLayerResult<EvernoteUser> res = evernoteuserManager.RemoveUserById(currentuser.Id);
+
+            if (res.Errors.Count > 0)
+            {
+                ErrorViewModel errorNotifyObj = new ErrorViewModel()
+                {
+                    RedirectingUrl="/Home/ShowProfile",
+                    Title = "Profil Silinemedi",
+                    Items = res.Errors
+                };
+
+                return View("Error", errorNotifyObj);
+            }
+
+            Session.Clear();
+            return RedirectToAction("Index");
         }
-
-        [HttpPost]
-        public ActionResult DeleteProfile(EvernoteUser model)
-        {
-            return View();
-        }
-
-
-
-
-
+               
         public ActionResult Login()
         {
             return View();
@@ -141,48 +197,54 @@ namespace MyEvernote.WebUI.Controllers
                     return View(model);
                 }
 
-                return RedirectToAction("RegisterOk");
+
+                OkViewModel notifymodel = new OkViewModel()
+                {
+
+                    Title = "Kayıt Başarılı",
+                    RedirectingUrl = "/Home/Login"                   
+                };
+                notifymodel.Items.Add("Lütfen eposta adrsinize gönderilen aktivasyon linkine tıklayarak hesabınızı aktifleştiriniz. Hesabınızı aktif etmeden note yazamaz, yorum yapamazsınız.");
+
+                return View("Ok", notifymodel);
             }
 
 
             return View(model);
         }
 
-        public ActionResult RegisterOk()
-        {
-            return View();
-        }
-
-
+       
         public ActionResult UserActivate(Guid id)
         {
             BusinessLayerResult<EvernoteUser> res = evernoteuserManager.ActivateUser(id);
             if (res.Errors.Count > 0)
             {
-                TempData["errors"] = res.Errors;
-                return RedirectToAction("UserActivateCancel");
+                ErrorViewModel errorNotifyObj = new ErrorViewModel()
+                {
+                    Title = "Geçersiz işlem",
+                    Items = res.Errors
+                };
+                return View("Error", errorNotifyObj);
             }
-            return RedirectToAction("UserActivateOk");
-        }
 
-        public ActionResult UserActivateOk()
-        {            
-            return View();
-        }
-        public ActionResult UserActivateCancel()
-        {
-            List<ErrorMessageObj> errors = null;
-            if (TempData["errors"] != null)
+            OkViewModel okNotifyObj = new OkViewModel()
             {
-                errors = TempData["errors"] as List<ErrorMessageObj>;
-            }
-            return View(errors);
+                Title = "Hesap Aktifleştirildi",
+                RedirectingUrl = "/Home/Login"
+            };
+
+            okNotifyObj.Items.Add("Hesabınız aktifleştirildi. Artık note yazabilir ve beğeni yapabilirsiniz.");
+
+            return View("Ok", okNotifyObj);
         }
 
+      
         public ActionResult Logout()
         {
             Session.Clear();
             return RedirectToAction("Index");
         }
+
+     
     }
 }

@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace MyEvernote.BusinessLayer
 {
@@ -43,7 +44,8 @@ namespace MyEvernote.BusinessLayer
                     Username=data.Username,
                     Email=data.Email,
                     Password=data.Password,
-                    ActivateGuid=Guid.NewGuid(),                   
+                    ActivateGuid=Guid.NewGuid(),   
+                    ProfileImageFilename="user.png",
                     IsActive=false,
                     IsAdmin=false
                 });
@@ -107,7 +109,6 @@ namespace MyEvernote.BusinessLayer
             }
             return res;
         }
-
         public BusinessLayerResult<EvernoteUser> GetUserById(int id)
         {
             BusinessLayerResult<EvernoteUser> res = new BusinessLayerResult<EvernoteUser>();
@@ -115,6 +116,66 @@ namespace MyEvernote.BusinessLayer
             if(res.result == null)
             {
                 res.AddError(ErrorMessageCode.UserNotFound, "Kullanıcı bulunamadı.");
+            }
+
+            return res;
+        }
+
+        public BusinessLayerResult<EvernoteUser> UpdateProfile(EvernoteUser model)
+        {
+            EvernoteUser db_user = repo.Find(x => x.Id == model.Id && (x.Username == model.Username || x.Email == model.Email));
+
+            BusinessLayerResult<EvernoteUser> res = new BusinessLayerResult<EvernoteUser>();
+
+            if(db_user!=null && db_user.Id != model.Id)
+            {
+                if (db_user.Username == model.Username)
+                    res.AddError(ErrorMessageCode.UsernameAlreadyExists, "Kullanıcı adı kayıtlı");
+
+                if (db_user.Email == model.Email)
+                    res.AddError(ErrorMessageCode.EmailAlreadyExists, "Email adresi kayıtlı");
+
+                return res;
+            }
+
+            res.result = repo.Find(x => x.Id == model.Id);
+            res.result.Email = model.Email;
+            res.result.Name = model.Name;
+            res.result.Surname = model.Surname;
+            res.result.Username = model.Username;
+            res.result.Password = model.Password;
+
+            if (string.IsNullOrEmpty(model.ProfileImageFilename) == false)
+            {
+                res.result.ProfileImageFilename = model.ProfileImageFilename;
+            }
+
+            if (repo.Update(res.result) == 0)
+            {
+                res.AddError(ErrorMessageCode.ProfileCouldNotUpdated, "Profil Güncellenemedi");
+            }
+
+            return res;
+        }
+
+        public BusinessLayerResult<EvernoteUser> RemoveUserById(int Id)
+        {
+            BusinessLayerResult<EvernoteUser> res = new BusinessLayerResult<EvernoteUser>();
+
+            EvernoteUser user = repo.Find(x => x.Id == Id);
+
+            if (user != null)
+            {
+                if (repo.Delete(user) == 0)
+                {
+                    res.AddError(ErrorMessageCode.UserCouldNotRemove, "Kullanıcı silinemedi");
+                    return res;
+                }
+            }
+
+            else
+            {
+                res.AddError(ErrorMessageCode.UserCouldNotFind, "Kullanıcı bulunamadi");
             }
 
             return res;

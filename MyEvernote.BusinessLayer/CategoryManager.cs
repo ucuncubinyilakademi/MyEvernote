@@ -8,17 +8,9 @@ using System.Threading.Tasks;
 
 namespace MyEvernote.BusinessLayer
 {
-    public class CategoryManager
+    public class CategoryManager:ManagerBase<Category>
     {
-        Repository<Category> repo = new Repository<Category>();
-        
-        public List<Category> GetCategories()
-        {
-            return repo.List();
-        }
-        public Category GetCategoryById(int id)
-        {
-            return repo.Find(x=> x.Id==id);
-        }
+       
+     
     }
 }
