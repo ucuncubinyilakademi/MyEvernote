@@ -12,12 +12,12 @@ namespace MyEvernote.BusinessLayer
     public class ManagerBase<T> : IDataAccess<T> where T : class
     {
         private Repository<T> repo = new Repository<T>();
-        public int Delete(T obj)
+        public virtual int Delete(T obj)
         {
             return repo.Delete(obj);
         }
 
-        public T Find(Expression<Func<T, bool>> filter)
+        public virtual T Find(Expression<Func<T, bool>> filter)
         {
             return repo.Find(filter);
         }
@@ -27,17 +27,17 @@ namespace MyEvernote.BusinessLayer
             return repo.Insert(obj);
         }
 
-        public List<T> List()
+        public virtual List<T> List()
         {
             return repo.List();
         }
 
-        public List<T> List(Expression<Func<T, bool>> filter)
+        public virtual List<T> List(Expression<Func<T, bool>> filter)
         {
             return repo.List(filter);
         }
 
-        public IQueryable<T> ListQueryable()
+        public virtual IQueryable<T> ListQueryable()
         {
             return repo.ListQueryable();
         }
@@ -47,7 +47,7 @@ namespace MyEvernote.BusinessLayer
             return repo.Save();
         }
 
-        public int Update(T obj)
+        public virtual int Update(T obj)
         {
             return repo.Update(obj);
         }

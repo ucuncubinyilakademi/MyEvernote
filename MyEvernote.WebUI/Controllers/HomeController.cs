@@ -22,8 +22,8 @@ namespace MyEvernote.WebUI.Controllers
         public ActionResult Index()
         {
             
-            //return View(noteManager.GetAllNote().OrderByDescending(x=> x.ModifiedOn));
-            return View(noteManager.GetAllNoteQueryable().OrderByDescending(x=> x.ModifiedOn).ToList());
+            //return View(noteManager.List().OrderByDescending(x=> x.ModifiedOn));
+            return View(noteManager.List().OrderByDescending(x=> x.ModifiedOn).ToList());
         }
 
         public ActionResult ByCategory(int? id)
@@ -44,7 +44,7 @@ namespace MyEvernote.WebUI.Controllers
         }
         public ActionResult MostLiked()
         {
-            return View("Index", noteManager.GetAllNoteQueryable().OrderByDescending(i => i.LikeCount).ToList());
+            return View("Index", noteManager.ListQueryable().OrderByDescending(i => i.LikeCount).ToList());
         }
 
         public ActionResult About()

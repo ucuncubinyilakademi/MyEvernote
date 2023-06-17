@@ -1,20 +1,22 @@
-﻿@model MyEvernote.Entity.Category
+﻿@model MyEvernote.Entity.Note
 
 @{
     ViewBag.Title = "Details";
 }
-<script>
-    $(function () {
-        $("footer").parent().hide();
-    });
-</script>
 <div class="container">
     <h2>Details</h2>
-
     <div>
-        <h4>Category</h4>
+        <h4>Note</h4>
         <hr />
         <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Category.Title)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Category.Title)
+            </dd>
+
             <dt>
                 @Html.DisplayNameFor(model => model.Title)
             </dt>
@@ -24,11 +26,27 @@
             </dd>
 
             <dt>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.Text)
             </dt>
 
             <dd>
-                @Html.DisplayFor(model => model.Description)
+                @Html.DisplayFor(model => model.Text)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.IsDraft)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.IsDraft)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.LikeCount)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.LikeCount)
             </dd>
 
             <dt>
@@ -58,7 +76,13 @@
         </dl>
     </div>
     <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new {@class="btn btn-warning btn-sm"}) |
-        @Html.ActionLink("Back to List", "Index",null, new { @class = "btn btn-success btn-sm" })
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
     </p>
 </div>
+
+<script>
+    $(function () {
+        $("footer").parent().hide();
+    });
+</script>

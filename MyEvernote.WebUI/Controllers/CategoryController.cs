@@ -48,8 +48,7 @@ namespace MyEvernote.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Categories.Add(category);
-                db.SaveChanges();
+                categoryManager.Insert(category);
                 return RedirectToAction("Index");
             }
 
@@ -63,35 +62,38 @@ namespace MyEvernote.WebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Categories.Find(id);
+            Category category = categoryManager.Find(i=> i.Id==id);
             if (category == null)
             {
                 return HttpNotFound();
             }
             return View(category);
         }
-    
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Category category)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(category).State = EntityState.Modified;
-                db.SaveChanges();
+                //ToDO: İncele.
+                Category cat = categoryManager.Find(i=> i.Id==category.Id);
+                cat.Title = category.Title;
+                cat.Description = category.Description;
+                categoryManager.Update(cat);
                 return RedirectToAction("Index");
             }
             return View(category);
         }
 
-        // GET: Category/Delete/5
+        //GET: Category/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Categories.Find(id);
+            Category category = categoryManager.Find(i=>i.Id==id);
             if (category == null)
             {
                 return HttpNotFound();
@@ -104,10 +106,9 @@ namespace MyEvernote.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Category category = db.Categories.Find(id);
-            db.Categories.Remove(category);
-            db.SaveChanges();
+            Category category = categoryManager.Find(i => i.Id == id);
+            categoryManager.Delete(category);
             return RedirectToAction("Index");
-        }      
+        }
     }
 }

@@ -13,7 +13,7 @@ using System.Xml;
 
 namespace MyEvernote.BusinessLayer
 {
-    public class EvernoteUserManager
+    public class EvernoteUserManager:ManagerBase<EvernoteUser>
     {
         private Repository<EvernoteUser> repo = new Repository<EvernoteUser>();
         public BusinessLayerResult<EvernoteUser> RegisterUser(RegisterViewModel data)
@@ -120,7 +120,6 @@ namespace MyEvernote.BusinessLayer
 
             return res;
         }
-
         public BusinessLayerResult<EvernoteUser> UpdateProfile(EvernoteUser model)
         {
             EvernoteUser db_user = repo.Find(x => x.Id == model.Id && (x.Username == model.Username || x.Email == model.Email));
@@ -157,7 +156,6 @@ namespace MyEvernote.BusinessLayer
 
             return res;
         }
-
         public BusinessLayerResult<EvernoteUser> RemoveUserById(int Id)
         {
             BusinessLayerResult<EvernoteUser> res = new BusinessLayerResult<EvernoteUser>();
@@ -176,6 +174,76 @@ namespace MyEvernote.BusinessLayer
             else
             {
                 res.AddError(ErrorMessageCode.UserCouldNotFind, "Kullanıcı bulunamadi");
+            }
+
+            return res;
+        }
+
+        public new BusinessLayerResult<EvernoteUser> Insert(EvernoteUser data)
+        {
+            EvernoteUser user = repo.Find(x => x.Username == data.Username || x.Email == data.Email);
+            BusinessLayerResult<EvernoteUser> res = new BusinessLayerResult<EvernoteUser>();
+
+            res.result = data;
+
+            if (user != null)
+            {
+                if (user.Username == data.Username)
+                {
+                    res.AddError(ErrorMessageCode.UsernameAlreadyExists, "Kullanıcı adı kayıtlı");
+                }
+                if (user.Email == data.Email)
+                {
+                    res.AddError(ErrorMessageCode.EmailAlreadyExists, "Email adresi kayıtlı");
+                }
+            }
+
+            else
+            {
+
+                res.result.ProfileImageFilename = "user.png";
+                res.result.ActivateGuid = Guid.NewGuid();
+
+                if (base.Insert(res.result) == 0)
+                {
+                    res.AddError(ErrorMessageCode.UserCouldNotInserted, "Kullanıcı eklenemedi.");
+                }
+            }
+
+            return res;
+        }
+
+        public new BusinessLayerResult<EvernoteUser> Update(EvernoteUser model)
+        {
+            EvernoteUser db_user = repo.Find(x => x.Id == model.Id && (x.Username == model.Username || x.Email == model.Email));
+
+            BusinessLayerResult<EvernoteUser> res = new BusinessLayerResult<EvernoteUser>();
+
+            res.result = model;
+
+            if (db_user != null && db_user.Id != model.Id)
+            {
+                if (db_user.Username == model.Username)
+                    res.AddError(ErrorMessageCode.UsernameAlreadyExists, "Kullanıcı adı kayıtlı");
+
+                if (db_user.Email == model.Email)
+                    res.AddError(ErrorMessageCode.EmailAlreadyExists, "Email adresi kayıtlı");
+
+                return res;
+            }
+
+            res.result = repo.Find(x => x.Id == model.Id);
+            res.result.Email = model.Email;
+            res.result.Name = model.Name;
+            res.result.Surname = model.Surname;
+            res.result.Username = model.Username;
+            res.result.Password = model.Password;
+            res.result.IsActive = model.IsActive;
+            res.result.IsAdmin = model.IsAdmin;
+
+            if (repo.Update(res.result) == 0)
+            {
+                res.AddError(ErrorMessageCode.ProfileCouldNotUpdated, "Profil Güncellenemedi");
             }
 
             return res;

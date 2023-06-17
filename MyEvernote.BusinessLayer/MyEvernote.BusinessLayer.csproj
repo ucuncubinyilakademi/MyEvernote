@@ -53,7 +53,9 @@
   <ItemGroup>
     <Compile Include="BusinessLayerResult.cs" />
     <Compile Include="CategoryManager.cs" />
+    <Compile Include="CommentManager.cs" />
     <Compile Include="EvernoteUserManager.cs" />
+    <Compile Include="LikedManager.cs" />
     <Compile Include="ManagerBase.cs" />
     <Compile Include="NoteManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -19,5 +19,21 @@ namespace MyEvernote.DataAccessLayer.EntityFramework
         public DbSet<Category> Categories { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Liked> Likeds { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            //Fluent API
+            modelBuilder.Entity<Note>()
+                .HasMany(n => n.Comments)
+                .WithRequired(c => c.Note)
+                .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<Note>()
+             .HasMany(n => n.Likes)
+             .WithRequired(c => c.Note)
+             .WillCascadeOnDelete(true);
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

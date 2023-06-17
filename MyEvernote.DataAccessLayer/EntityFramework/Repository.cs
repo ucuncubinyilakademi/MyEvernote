@@ -69,7 +69,7 @@ namespace MyEvernote.DataAccessLayer.EntityFramework
             }
             return Save();
         }
-        public int Delete(T obj)
+        public virtual int Delete(T obj)
         {
             _objectSet.Remove(obj);
             return Save();
