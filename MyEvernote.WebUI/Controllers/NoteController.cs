@@ -15,6 +15,7 @@ namespace MyEvernote.WebUI.Controllers
     public class NoteController : Controller
     {
         private NoteManager noteManager = new NoteManager();
+        private CategoryManager categoryManager = new CategoryManager();
         // GET: Note
         public ActionResult Index()
         {
@@ -40,88 +41,90 @@ namespace MyEvernote.WebUI.Controllers
         }
 
         // GET: Note/Create
-        //public ActionResult Create()
-        //{
-        //    ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Title");
-        //    return View();
-        //}
+        public ActionResult Create()
+        {
+            ViewBag.CategoryId = new SelectList(CacheHelper.GetCategoriesFromCache(), "Id", "Title");
+            return View();
+        }
 
-        //// POST: Note/Create
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create([Bind(Include = "Id,Title,Text,IsDraft,LikeCount,CategoryId,CreatedOn,ModifiedOn,ModifiedUsername")] Note note)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Notes.Add(note);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Note note)
+        {
+            ModelState.Remove("CreateOn");
+            ModelState.Remove("ModifiedOn");
+            if (ModelState.IsValid)
+            {
+                note.Owner = CurrentSession.User;
+                noteManager.Insert(note);
+                return RedirectToAction("Index");
+            }
 
-        //    ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Title", note.CategoryId);
-        //    return View(note);
-        //}
+            ViewBag.CategoryId = new SelectList(CacheHelper.GetCategoriesFromCache(), "Id", "Title", note.CategoryId);
+            return View(note);
+        }
 
         //// GET: Note/Edit/5
-        //public ActionResult Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Note note = db.Notes.Find(id);
-        //    if (note == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Title", note.CategoryId);
-        //    return View(note);
-        //}
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Note note = noteManager.Find(i=> i.Id==id);
+            if (note == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.CategoryId = new SelectList(CacheHelper.GetCategoriesFromCache(), "Id", "Title", note.CategoryId);
+            return View(note);
+        }
 
-        //// POST: Note/Edit/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include = "Id,Title,Text,IsDraft,LikeCount,CategoryId,CreatedOn,ModifiedOn,ModifiedUsername")] Note note)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(note).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Title", note.CategoryId);
-        //    return View(note);
-        //}
+       
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Note note)
+        {
+            if (ModelState.IsValid)
+            {
+                var model = noteManager.Find(i => i.Id == note.Id);
+                model.Title = note.Title;
+                model.Text = note.Text;
+                model.CategoryId = note.CategoryId;
+                model.IsDraft = note.IsDraft;
 
-        //// GET: Note/Delete/5
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Note note = db.Notes.Find(id);
-        //    if (note == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(note);
-        //}
 
-        //// POST: Note/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    Note note = db.Notes.Find(id);
-        //    db.Notes.Remove(note);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
-      
+                noteManager.Update(model);
+                return RedirectToAction("Index");
+            }
+            ViewBag.CategoryId = new SelectList(CacheHelper.GetCategoriesFromCache(), "Id", "Title", note.CategoryId);
+            return View(note);
+        }
+
+        // GET: Note/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Note note = noteManager.Find(i => i.Id == id);
+            if (note == null)
+            {
+                return HttpNotFound();
+            }
+            return View(note);
+        }
+
+        // POST: Note/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            Note note = noteManager.Find(i => i.Id == id);
+            noteManager.Delete(note);
+            return RedirectToAction("Index");
+        }
     }
 }

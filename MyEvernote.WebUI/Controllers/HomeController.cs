@@ -2,6 +2,7 @@
 using MyEvernote.Entity;
 using MyEvernote.Entity.Messages;
 using MyEvernote.Entity.ValueObjects;
+using MyEvernote.WebUI.Models;
 using MyEvernote.WebUI.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace MyEvernote.WebUI.Controllers
         {
             
             //return View(noteManager.List().OrderByDescending(x=> x.ModifiedOn));
-            return View(noteManager.List().OrderByDescending(x=> x.ModifiedOn).ToList());
+            return View(noteManager.ListQueryable().Where(i=> i.IsDraft==false).OrderByDescending(x=> x.ModifiedOn).ToList());
         }
 
         public ActionResult ByCategory(int? id)
@@ -40,11 +41,11 @@ namespace MyEvernote.WebUI.Controllers
                 return HttpNotFound();
             }
 
-            return View("Index", cat.Notes.OrderByDescending(i => i.ModifiedOn).ToList());
+            return View("Index", cat.Notes.OrderByDescending(i => i.ModifiedOn).Where(i => i.IsDraft == false).ToList());
         }
         public ActionResult MostLiked()
         {
-            return View("Index", noteManager.ListQueryable().OrderByDescending(i => i.LikeCount).ToList());
+            return View("Index", noteManager.ListQueryable().Where(i => i.IsDraft == false).OrderByDescending(i => i.LikeCount).ToList());
         }
 
         public ActionResult About()
@@ -169,7 +170,7 @@ namespace MyEvernote.WebUI.Controllers
                     return View(model);
                 }
                 // Session'a kullanıcı bilgi saklama..
-                Session["login"] = res.result;
+                CurrentSession.Set<EvernoteUser>("login", res.result);
                 return RedirectToAction("Index");
             }
             return View(model);

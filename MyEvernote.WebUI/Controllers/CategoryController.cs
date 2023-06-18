@@ -5,9 +5,11 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Caching;
 using System.Web.Mvc;
 using MyEvernote.BusinessLayer;
 using MyEvernote.Entity;
+using MyEvernote.WebUI.Models;
 
 namespace MyEvernote.WebUI.Controllers
 {
@@ -49,6 +51,7 @@ namespace MyEvernote.WebUI.Controllers
             if (ModelState.IsValid)
             {
                 categoryManager.Insert(category);
+                CacheHelper.RemoveCategoriesFromCache();
                 return RedirectToAction("Index");
             }
 
@@ -81,6 +84,7 @@ namespace MyEvernote.WebUI.Controllers
                 cat.Title = category.Title;
                 cat.Description = category.Description;
                 categoryManager.Update(cat);
+                CacheHelper.RemoveCategoriesFromCache();
                 return RedirectToAction("Index");
             }
             return View(category);
@@ -108,6 +112,7 @@ namespace MyEvernote.WebUI.Controllers
         {
             Category category = categoryManager.Find(i => i.Id == id);
             categoryManager.Delete(category);
+            CacheHelper.RemoveCategoriesFromCache();
             return RedirectToAction("Index");
         }
     }

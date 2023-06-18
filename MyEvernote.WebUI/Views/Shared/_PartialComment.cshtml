@@ -1,0 +1,18 @@
+﻿@using MyEvernote.Entity
+
+@model List<Comment>
+
+@foreach (var item in Model)
+{
+    <div class="media">
+        <div class="media-left media-middle">
+            <div class="media-object">
+                <span class="glyphicon glyphicon-commment"></span>
+            </div>
+        </div>
+        <div class="media-body">
+            @item.Text
+        </div>
+    </div>
+}
+
