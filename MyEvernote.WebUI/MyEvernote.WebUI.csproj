@@ -179,7 +179,7 @@
     <Content Include="Views\Note\Details.cshtml" />
     <Content Include="Views\Note\Edit.cshtml" />
     <Content Include="Views\Note\Index.cshtml" />
-    <Content Include="Views\Shared\_PartialComment.cshtml" />
+    <Content Include="Views\Shared\_PartialComments.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
