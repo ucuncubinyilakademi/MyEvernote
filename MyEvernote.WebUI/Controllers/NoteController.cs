@@ -134,11 +134,15 @@ namespace MyEvernote.WebUI.Controllers
         [HttpPost]
         public ActionResult GetLiked(int[] ids)
         {
-            List<int> likedNoteIds = likedManager.List(
-                x => x.LikedUser.Id == CurrentSession.User.Id && ids.Contains(x.Note.Id)).Select(
-                x => x.Note.Id).ToList();
+            if (CurrentSession.User != null)
+            {
+                List<int> likedNoteIds = likedManager.List(
+               x => x.LikedUser.Id == CurrentSession.User.Id && ids.Contains(x.Note.Id)).Select(
+               x => x.Note.Id).ToList();
 
-            return Json(new { result = likedNoteIds });
+                return Json(new { result = likedNoteIds });
+            }
+            return null;
         }
         [Auth]
         [HttpPost]

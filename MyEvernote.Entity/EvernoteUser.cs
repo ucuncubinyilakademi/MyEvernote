@@ -36,5 +36,12 @@ namespace MyEvernote.Entity
         public virtual List<Note> Notes { get; set; }
         public virtual List<Comment> Comments { get; set; }
         public virtual List<Liked> Likes { get; set; }
+
+        public EvernoteUser()
+        {
+            Notes = new List<Note>();
+            Comments = new List<Comment>();
+            Likes = new List<Liked>();
+        }
     }
 }

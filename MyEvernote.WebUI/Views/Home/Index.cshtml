@@ -46,7 +46,7 @@
             <div class="row">
                 @foreach (Note item in Model)
                 {
-                    <div class="col-sm-4 col-lg-4 col-md-4">
+                    <div class="col-sm-4 col-lg-4 col-md-4" data-note-id="@item.Id">
                         <div class="thumbnail">
                             <img src="http://placehold.it/320x150" alt="@item.Title">
                             <div class="caption">
