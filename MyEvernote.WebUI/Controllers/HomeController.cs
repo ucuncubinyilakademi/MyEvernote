@@ -2,6 +2,7 @@
 using MyEvernote.Entity;
 using MyEvernote.Entity.Messages;
 using MyEvernote.Entity.ValueObjects;
+using MyEvernote.WebUI.Filters;
 using MyEvernote.WebUI.Models;
 using MyEvernote.WebUI.ViewModels;
 using System;
@@ -52,7 +53,7 @@ namespace MyEvernote.WebUI.Controllers
         {
             return View();
         }
-
+        [Auth]
         public ActionResult ShowProfile()
         {
             EvernoteUser currentUser = Session["login"] as EvernoteUser;
@@ -70,7 +71,7 @@ namespace MyEvernote.WebUI.Controllers
 
             return View(res.result);
         }
-
+        [Auth]
         public ActionResult EditProfile()
         {
             EvernoteUser currentUser = Session["login"] as EvernoteUser;
@@ -92,6 +93,7 @@ namespace MyEvernote.WebUI.Controllers
         }
 
         [HttpPost]
+        [Auth]
         public ActionResult EditProfile(EvernoteUser model, HttpPostedFileBase ProfileImage)
         {
             if(ProfileImage != null && 
@@ -123,7 +125,7 @@ namespace MyEvernote.WebUI.Controllers
             Session["login"] = res.result; //profile güncellendiğinde oturum güncellenecek.
             return RedirectToAction("ShowProfile");
         }
-
+        [Auth]
         public ActionResult DeleteProfile()
         {
             EvernoteUser currentuser = Session["login"] as EvernoteUser;
@@ -246,6 +248,9 @@ namespace MyEvernote.WebUI.Controllers
             return RedirectToAction("Index");
         }
 
-     
+        public ActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }

@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using MyEvernote.BusinessLayer;
 using MyEvernote.Entity;
+using MyEvernote.WebUI.Filters;
 using MyEvernote.WebUI.Models;
 
 namespace MyEvernote.WebUI.Controllers
@@ -16,6 +17,7 @@ namespace MyEvernote.WebUI.Controllers
     {
         private NoteManager noteManager = new NoteManager();
         private CategoryManager categoryManager = new CategoryManager();
+        private LikedManager likedManager = new LikedManager();
         // GET: Note
         public ActionResult Index()
         {
@@ -39,7 +41,7 @@ namespace MyEvernote.WebUI.Controllers
             }
             return View(note);
         }
-
+        [Auth]
         // GET: Note/Create
         public ActionResult Create()
         {
@@ -47,7 +49,7 @@ namespace MyEvernote.WebUI.Controllers
             return View();
         }
 
-        
+        [Auth]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Note note)
@@ -81,7 +83,7 @@ namespace MyEvernote.WebUI.Controllers
             return View(note);
         }
 
-       
+        [Auth]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Note note)
@@ -102,6 +104,7 @@ namespace MyEvernote.WebUI.Controllers
             return View(note);
         }
 
+        [Auth]
         // GET: Note/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -118,6 +121,7 @@ namespace MyEvernote.WebUI.Controllers
         }
 
         // POST: Note/Delete/5
+        [Auth]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -126,5 +130,57 @@ namespace MyEvernote.WebUI.Controllers
             noteManager.Delete(note);
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public ActionResult GetLiked(int[] ids)
+        {
+            List<int> likedNoteIds = likedManager.List(
+                x => x.LikedUser.Id == CurrentSession.User.Id && ids.Contains(x.Note.Id)).Select(
+                x => x.Note.Id).ToList();
+
+            return Json(new { result = likedNoteIds });
+        }
+        [Auth]
+        [HttpPost]
+        public ActionResult SetLikeState(int noteid, bool liked)
+        {
+            int res = 0;
+            Liked like = likedManager.Find(x => x.Note.Id == noteid && x.LikedUser.Id == CurrentSession.User.Id);
+
+            Note note = noteManager.Find(x => x.Id == noteid);
+
+            if(like!=null && liked == false)
+            {
+                res = likedManager.Delete(like);
+            }
+            else if(like==null && liked)
+            {
+                res = likedManager.Insert(new Liked()
+                {
+                    Note = note,
+                    LikedUser = CurrentSession.User
+                });
+            }
+
+            if (res > 0)
+            {
+                if (liked)
+                {
+                    note.LikeCount++;
+                }
+                else
+                {
+                    note.LikeCount--;
+                }
+
+                //liked == true ? note.LikeCount++ : note.LikeCount--;
+
+                res = noteManager.Update(note);
+
+                return Json(new { hasError = false, errorMessage = string.Empty, result = note.LikeCount });
+            }
+            return Json(new { hasError = true, errorMessage = "Beğenme işlemi gerçekleştirilemedi.", result = note.LikeCount });
+        }
+
     }
 }

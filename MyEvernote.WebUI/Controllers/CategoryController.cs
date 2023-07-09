@@ -9,10 +9,13 @@ using System.Web.Caching;
 using System.Web.Mvc;
 using MyEvernote.BusinessLayer;
 using MyEvernote.Entity;
+using MyEvernote.WebUI.Filters;
 using MyEvernote.WebUI.Models;
 
 namespace MyEvernote.WebUI.Controllers
 {
+    [Auth]
+    [AuthAdmin]
     public class CategoryController : Controller
     {
         private CategoryManager categoryManager = new CategoryManager();
